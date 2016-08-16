@@ -13,6 +13,7 @@
 'use strict';
 
 const path = require('path');
+const net = require('net');
 
 exports.commands = {
 
@@ -166,6 +167,10 @@ exports.commands = {
 	hostsearch: 'ipsearch',
 	ipsearch: function (target, room, user, connection, cmd) {
 		if (!target.trim()) return this.parse('/help ipsearch');
+		if (net.isIP(target.trim()) === 0 && (!target.includes('.'))) {
+			return this.errorReply("No results found because this is not a valid IP or host target.");
+		}
+
 		if (!this.can('rangeban')) return;
 		let results = [];
 
